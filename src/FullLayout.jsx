@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useRef } from "react"
 import "./styles.css"
 
 export default function LandingPage() {
@@ -7,6 +7,11 @@ export default function LandingPage() {
   const [concerns, setConcerns] = useState("")
   const [trust, setTrust] = useState("")
   const [email, setEmail] = useState("")
+
+  const [inputText, setInputText] = useState('');
+  const [redactedText, setRedactedText] = useState('');
+  const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const handleUploadClick = () => {
     setUploadClicked(true)
@@ -19,6 +24,46 @@ export default function LandingPage() {
     console.log("Feedback submitted:", { comfort, concerns, trust, email })
     alert("Thank you for your feedback!")
   }
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const fileText = event.target.result;
+      setInputText(fileText); // populate the input text for UI
+
+      // Trigger redaction
+      setLoading(true);
+      try {
+        const response = await fetch('http://localhost:5050/redact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ text: fileText }),
+        });
+
+        const data = await response.json();
+        setRedactedText(data.redacted_text);
+      } catch (error) {
+        console.error('Redaction failed:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    reader.readAsText(file);
+  };
+
+  const scrollToSection1 = () => {
+    const section = document.getElementById('trust-section');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' }); // 'smooth' for a smooth scroll animation
+    }
+  };
+  
 
   return (
     <div className="landing-page">
@@ -40,22 +85,76 @@ export default function LandingPage() {
             Earn rewards for securely sharing <span className="highlight">anonymised chat data</span>
           </h1>
 
-          <p className="hero-subtitle">Help businesses make smarter decisions — your data, your control.</p>
+          <p className="hero-subtitle">Help businesses make smarter decisions. Your data, your control.</p>
 
-          <button className="cta-button" onClick={handleUploadClick}>
-            <span className="icon">⬆️</span> Simulate Upload
+          <button className="cta-button" onClick={scrollToSection1}>
+            <span className="icon"></span> Learn More
           </button>
 
-          {uploadClicked && (
-            <div className="success-message">
-              <p>✅ Upload simulation triggered!</p>
+          <div className="upload-demo">
+            <div className="upload-card">
+              <div className="upload-icon"></div>
+
+              <div>
+                <h3>Test the Experience</h3>
+                <p>See how our upload process works with a simulation</p>
+              </div>
+
+              <button className="upload-button" onClick={() => fileInputRef.current.click()} disabled={loading}>
+                {loading ? 'Anonymizing...' : 'Upload file & Check Anonymization'}
+              </button>
+              <input
+                type="file"
+                accept=".txt"
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                onChange={handleFileUpload}
+              />
+              
             </div>
-          )}
+            <div className="redactor-container">
+              <div className="text-box">
+                <h4 className="box-title">Your Uploaded Chat</h4>
+                <div className="preredacted-text" style={{ whiteSpace: 'pre-wrap' }}>
+                  {inputText || <span style={{ color: '#999' }}>Upload a file...</span>}
+                </div>
+              </div>
+
+              <div className="text-box">
+                <h4 className="box-title">Your Anonymized Uploaded Chat</h4>
+                <div className="redacted-text">
+                  {redactedText && (
+                    <>
+                      <p>{redactedText}</p>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="upload-card">
+              <div className="upload-icon"></div>
+
+              <div>
+                <h3>Confirmation</h3>
+                <p>Click to submit</p>
+              </div>
+
+              <button className="upload-button" onClick={handleUploadClick}>
+                Submit!
+              </button>
+              
+
+              {uploadClicked && <div className="track-badge">Thanks for trying out our chat anonymization feature. Please feel free to leave your feedback below.</div>}
+            </div>
+
+          </div>
+
         </div>
       </section>
 
       {/* Trust & Privacy Section */}
-      <section className="trust-section">
+      <section className="trust-section" id="trust-section">
         <div className="container">
           <div className="section-header">
             <h2>Your Privacy is Our Priority</h2>
@@ -86,9 +185,9 @@ export default function LandingPage() {
           <div className="preview-block">
             <h3>Example of Anonymised Data</h3>
             <div className="code-block">
-              <div className="original-text">Original: "Hey John, can you send me the report by 3pm?"</div>
+              <div className="original-text">Original: "Hey <span id="highlight-text-yellow">John</span>, can you send the report to my office at <span id="highlight-text-yellow">391A Orchard Road #26-01</span> by 3pm?"</div>
               <div className="arrow">↓</div>
-              <div className="anonymised-text">Anonymised: "Request for document delivery with time constraint"</div>
+              <div className="anonymised-text">Anonymised: "Hey <span id="highlight-text-yellow">Person1</span>, can you send the report to my office at <span id="highlight-text-yellow">[pii]</span> by 3pm?"</div>
             </div>
           </div>
         </div>

@@ -37,7 +37,6 @@ p {
 .hero-section {
   padding: 80px 0;
   text-align: center;
-  height: 100vh;
 }
 
 .icon-container {
@@ -505,4 +504,78 @@ input[type="email"]:focus {
     flex-wrap: wrap;
     gap: 16px;
   }
+}
+
+.upload-demo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 2rem auto;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  
+}
+
+.redactor-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.preredacted-text {
+  display: flex;
+  min-width: 300px;
+  min-height: 200px;
+  max-width: 200px;
+  max-height: 200px;
+  margin: 1rem 1rem;
+  background-color: hsl(0, 0%, 90%);
+  border: 2px solid black;
+  scrollbar-width: none;      /* hide scrollbar */
+  resize: none;               /* 🔒 Prevent resizing */
+  box-sizing: border-box;     /* 🧱 Match padding/sizing with div */
+  font-family: inherit;       /* 📝 Ensure text style matches */
+  font-size: inherit;
+  line-height: inherit;
+  border-radius: 6px;
+  white-space: pre-wrap;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.redacted-text {
+  display: flex;
+  min-width: 300px;
+  min-height: 200px;
+  max-width: 200px;
+  max-height: 200px;
+  margin: 1rem 1rem;
+  background-color: hsl(0, 0%, 90%);
+  border: 2px solid black;
+  scrollbar-width: none;      /* hide scrollbar */
+  resize: none;               /* 🔒 Prevent resizing */
+  box-sizing: border-box;     /* 🧱 Match padding/sizing with div */
+  font-family: inherit;       /* 📝 Ensure text style matches */
+  font-size: inherit;
+  line-height: inherit;
+  border-radius: 6px;
+  white-space: pre-wrap;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.box-title {
+  margin-bottom: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937; /* Tailwind gray-800 */
+}
+
+#highlight-text-yellow {
+  background-color: yellow;
 }
