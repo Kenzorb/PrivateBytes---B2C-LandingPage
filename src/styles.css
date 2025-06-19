@@ -46,39 +46,19 @@ p {
 }
 
 .icon-circle {
-  width: 96px;
-  height: 96px;
-  background-color: #dbeafe;
+  width: 150px;
+  height: 150px;
+  background-color: rgba(0,0,0,0.9);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.icon-group {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.companylogo {
+  width: 100px;
 }
 
-.icon {
-  font-size: 24px;
-}
-
-.check-badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 24px;
-  height: 24px;
-  background-color: #22c55e;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-}
 
 .hero-title {
   font-size: 48px;
@@ -358,18 +338,36 @@ p {
   transition: background-color 0.2s;
 }
 
-.upload-button:hover {
+.upload-button.submitted {
+  background-color: #90caf9; /* Lightened blue */
+  color: #f0f0f0;
+  cursor: default;
+}
+
+.upload-button:not(.submitted):hover {
   background-color: #1d4ed8;
 }
 
 .track-badge {
-  display: inline-block;
+  display: flex;
   margin-top: 16px;
   background-color: #dcfce7;
   color: #166534;
   padding: 4px 12px;
   border-radius: 9999px;
   font-size: 14px;
+  white-space: pre-wrap;
+}
+
+.upload-prompt-text {
+  display: inline-block;
+  margin-top: 16px;
+  background-color: #ffeded;
+  color: #d32f2f; /* a nice red */
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 14px;
+  white-space: pre-wrap;
 }
 
 /* Feedback Form */
@@ -529,10 +527,10 @@ input[type="email"]:focus {
 
 .preredacted-text {
   display: flex;
-  min-width: 300px;
-  min-height: 200px;
-  max-width: 200px;
-  max-height: 200px;
+  min-width: 450px;
+  min-height: 300px;
+  max-width: 450px;
+  max-height: 300px;
   margin: 1rem 1rem;
   background-color: hsl(0, 0%, 90%);
   border: 2px solid black;
@@ -550,10 +548,10 @@ input[type="email"]:focus {
 
 .redacted-text {
   display: flex;
-  min-width: 300px;
-  min-height: 200px;
-  max-width: 200px;
-  max-height: 200px;
+  min-width: 450px;
+  min-height: 300px;
+  max-width: 450px;
+  max-height: 300px;
   margin: 1rem 1rem;
   background-color: hsl(0, 0%, 90%);
   border: 2px solid black;
@@ -578,4 +576,19 @@ input[type="email"]:focus {
 
 #highlight-text-yellow {
   background-color: yellow;
+}
+
+.to-feedback-button {
+  background-color: #10b981;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  margin-top: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.to-feedback-button:hover {
+  background-color: #059669;
 }

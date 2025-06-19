@@ -7,6 +7,9 @@ export default function LandingPage() {
   const [concerns, setConcerns] = useState("")
   const [trust, setTrust] = useState("")
   const [email, setEmail] = useState("")
+  const [submitted, setSubmitted] = useState(false)
+  const [showUploadPrompt, setShowUploadPrompt] = useState(false);
+  const [showNextButton, setShowNextButton] = useState(false);
 
   const [inputText, setInputText] = useState('');
   const [redactedText, setRedactedText] = useState('');
@@ -16,7 +19,7 @@ export default function LandingPage() {
   const handleUploadClick = () => {
     setUploadClicked(true)
     // Track click: upload_click_model_b
-    console.log("Upload clicked - Model B")
+    console.log("Submit clicked - Model B")
   }
 
   const handleFeedbackSubmit = (e) => {
@@ -24,6 +27,17 @@ export default function LandingPage() {
     console.log("Feedback submitted:", { comfort, concerns, trust, email })
     alert("Thank you for your feedback!")
   }
+
+  const handleSubmitClick = () => {
+    if (!inputText || inputText.trim() === '') {
+      setShowUploadPrompt(true);
+      return; // Stop submission
+    }
+    setShowUploadPrompt(false); // Clear prompt if any
+    handleUploadClick(); // or run your submission logic here
+    setShowNextButton(true); // Show the next button
+    setSubmitted(true);
+  };
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -33,6 +47,10 @@ export default function LandingPage() {
     reader.onload = async (event) => {
       const fileText = event.target.result;
       setInputText(fileText); // populate the input text for UI
+      setSubmitted(false); // re-enable the submit button
+      setShowUploadPrompt(false); // Clear prompt if any
+      setUploadClicked(false)
+      setShowNextButton(false); // Show the next button
 
       // Trigger redaction
       setLoading(true);
@@ -63,6 +81,13 @@ export default function LandingPage() {
       section.scrollIntoView({ behavior: 'smooth' }); // 'smooth' for a smooth scroll animation
     }
   };
+
+  const scrollToSection2 = () => {
+    const section = document.getElementById('feedback-section');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' }); // 'smooth' for a smooth scroll animation
+    }
+  };
   
 
   return (
@@ -72,13 +97,9 @@ export default function LandingPage() {
         <div className="container">
           <div className="icon-container">
             <div className="icon-circle">
-              <div className="icon-group">
-                <span className="icon">🔒</span>
-                <span className="icon">💬</span>
-                <span className="icon">📈</span>
-              </div>
+              <img src="./public/favicon.ico" className="companylogo"></img>
             </div>
-            <div className="check-badge">✓</div>
+            
           </div>
 
           <h1 className="hero-title">
@@ -140,12 +161,25 @@ export default function LandingPage() {
                 <p>Click to submit</p>
               </div>
 
-              <button className="upload-button" onClick={handleUploadClick}>
-                Submit!
+              <button className={`upload-button ${submitted ? 'submitted' : ''}`} onClick={handleSubmitClick} disabled={submitted}>
+                {submitted ? 'Submitted' : 'Submit'}
               </button>
               
+              {showUploadPrompt && (
+                <div className="upload-prompt-text" style={{ color: 'red', marginTop: '8px' }}>
+                  Please upload a file or paste your chat text before submitting.
+                </div>
+              )}
+              {uploadClicked && (
+                <div className="track-badge">
+                  {"Thanks for trying out our anonymization feature!\nNo data is stored\nWe’d love your feedback on how we can improve."}
+                </div>)}
 
-              {uploadClicked && <div className="track-badge">Thanks for trying out our chat anonymization feature. Please feel free to leave your feedback below.</div>}
+              {showNextButton && (
+                <button className="to-feedback-button" onClick={scrollToSection2}>
+                  Continue
+                </button>
+              )}
             </div>
 
           </div>
@@ -208,7 +242,7 @@ export default function LandingPage() {
             <div className="step">
               <div className="step-number">2</div>
               <h3>Data Gets Anonymised</h3>
-              <p>Our system removes all personal information — no names, numbers, or timestamps are saved</p>
+              <p>Our system removes all personal information. No names, numbers, or timestamps are saved</p>
             </div>
 
             <div className="step">
@@ -220,30 +254,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Upload Section */}
-      <section className="upload-section">
-        <div className="container">
-          <h2>Ready to Get Started?</h2>
-
-          <div className="upload-card">
-            <div className="upload-icon">⬆️</div>
-
-            <div>
-              <h3>Test the Experience</h3>
-              <p>See how our upload process works with a simulation</p>
-            </div>
-
-            <button className="upload-button" onClick={handleUploadClick}>
-              Simulate Upload
-            </button>
-
-            {uploadClicked && <div className="track-badge">Thanks for trying out our chat anonymization feature. Please feel free to leave your feedback below.</div>}
-          </div>
-        </div>
-      </section>
+      
 
       {/* Feedback Form */}
-      <section className="feedback-section">
+      <section className="feedback-section" id="feedback-section">
         <div className="container">
           <div className="form-card">
             <div className="form-header">
