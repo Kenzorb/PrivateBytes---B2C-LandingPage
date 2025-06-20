@@ -1,12 +1,13 @@
 import { useState, useRef } from "react"
 import "./styles.css"
+import FeedbackSection from "./components/feedback-section"
+import HowItWorks from "./components/how-it-works"
+import TrustandPrivacy from "./components/trust-and-privacy"
+import { logEvent } from "firebase/analytics";
+import { getAnalyticsInstance } from "./config/firebase-config"
 
 export default function LandingPage() {
   const [uploadClicked, setUploadClicked] = useState(false)
-  const [comfort, setComfort] = useState("")
-  const [concerns, setConcerns] = useState("")
-  const [trust, setTrust] = useState("")
-  const [email, setEmail] = useState("")
   const [submitted, setSubmitted] = useState(false)
   const [showUploadPrompt, setShowUploadPrompt] = useState(false);
   const [showNextButton, setShowNextButton] = useState(false);
@@ -22,13 +23,7 @@ export default function LandingPage() {
     console.log("Submit clicked - Model B")
   }
 
-  const handleFeedbackSubmit = (e) => {
-    e.preventDefault()
-    console.log("Feedback submitted:", { comfort, concerns, trust, email })
-    alert("Thank you for your feedback!")
-  }
-
-  const handleSubmitClick = () => {
+  const handleSubmitClick = async () => {
     if (!inputText || inputText.trim() === '') {
       setShowUploadPrompt(true);
       return; // Stop submission
@@ -37,6 +32,8 @@ export default function LandingPage() {
     handleUploadClick(); // or run your submission logic here
     setShowNextButton(true); // Show the next button
     setSubmitted(true);
+
+    await TrackSubmitClick()
   };
 
   const handleFileUpload = async (e) => {
@@ -90,6 +87,28 @@ export default function LandingPage() {
   };
   
 
+  const TrackUploadClick = async () => {
+    const analytics = await getAnalyticsInstance()
+    if (analytics) {
+      logEvent(analytics, "chat_upload_click", {
+        label: "Upload Chat Click",
+      })
+    } else {
+      console.warn("Analytics is not supported")
+    }
+  }
+
+  const TrackSubmitClick = async () => {
+    const analytics = await getAnalyticsInstance()
+    if (analytics) {
+      logEvent(analytics, "chat_uploaded_and_submitted_click", {
+        label: "Submit Chat and Upload Click",
+      })
+    } else {
+      console.warn("Analytics is not supported")
+    }
+  }
+
   return (
     <div className="landing-page">
       {/* Hero Section */}
@@ -121,7 +140,7 @@ export default function LandingPage() {
                 <p>See how our upload process works with a simulation</p>
               </div>
 
-              <button className="upload-button" onClick={() => fileInputRef.current.click()} disabled={loading}>
+              <button className="upload-button" onClick={() => {fileInputRef.current.click(); TrackUploadClick()}} disabled={loading}>
                 {loading ? 'Anonymizing...' : 'Upload file & Check Anonymization'}
               </button>
               <input
@@ -188,144 +207,13 @@ export default function LandingPage() {
       </section>
 
       {/* Trust & Privacy Section */}
-      <section className="trust-section" id="trust-section">
-        <div className="container">
-          <div className="section-header">
-            <h2>Your Privacy is Our Priority</h2>
-            <p>We never store names, numbers, or timestamps. You stay fully anonymous.</p>
-          </div>
-
-          <div className="card-grid">
-            <div className="card">
-              <div className="card-icon blue">🔒</div>
-              <h3>Data Anonymised</h3>
-              <p>All personal identifiers are removed before processing</p>
-            </div>
-
-            <div className="card">
-              <div className="card-icon green">📊</div>
-              <h3>Only Insights Shared</h3>
-              <p>We share patterns and trends, never your actual messages</p>
-            </div>
-
-            <div className="card">
-              <div className="card-icon red">🗑️</div>
-              <h3>Delete Anytime</h3>
-              <p>You have full control to remove your data whenever you want</p>
-            </div>
-          </div>
-
-          {/* Preview Block for Model B */}
-          <div className="preview-block">
-            <h3>Example of Anonymised Data</h3>
-            <div className="code-block">
-              <div className="original-text">Original: "Hey <span id="highlight-text-yellow">John</span>, can you send the report to my office at <span id="highlight-text-yellow">391A Orchard Road #26-01</span> by 3pm?"</div>
-              <div className="arrow">↓</div>
-              <div className="anonymised-text">Anonymised: "Hey <span id="highlight-text-yellow">Person1</span>, can you send the report to my office at <span id="highlight-text-yellow">[pii]</span> by 3pm?"</div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <TrustandPrivacy></TrustandPrivacy>
 
       {/* How It Works Section */}
-      <section className="how-it-works-section">
-        <div className="container">
-          <h2>How It Works</h2>
+      <HowItWorks></HowItWorks>
 
-          <div className="steps-grid">
-            <div className="step">
-              <div className="step-number">1</div>
-              <h3>Upload Your Chat File</h3>
-              <p>Export your chat history from WhatsApp, Telegram, or other platforms and upload it securely</p>
-            </div>
-
-            <div className="step">
-              <div className="step-number">2</div>
-              <h3>Data Gets Anonymised</h3>
-              <p>Our system removes all personal information. No names, numbers, or timestamps are saved</p>
-            </div>
-
-            <div className="step">
-              <div className="step-number">3</div>
-              <h3>Earn Rewards</h3>
-              <p>Get tokens or cash when your anonymised data helps generate valuable business insights</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      
-
-      {/* Feedback Form */}
-      <section className="feedback-section" id="feedback-section">
-        <div className="container">
-          <div className="form-card">
-            <div className="form-header">
-              <h2>We'd Love Your Feedback</h2>
-              <p>Help us improve the experience by sharing your thoughts</p>
-            </div>
-            <div className="form-body">
-              <form onSubmit={handleFeedbackSubmit}>
-                <div className="form-group">
-                  <label>How comfortable would you feel using this flow?</label>
-                  <div className="radio-group">
-                    {[1, 2, 3, 4, 5].map((num) => (
-                      <label key={num} className="radio-label">
-                        <input
-                          type="radio"
-                          name="comfort"
-                          value={num.toString()}
-                          checked={comfort === num.toString()}
-                          onChange={(e) => setComfort(e.target.value)}
-                        />
-                        <span>{num}</span>
-                      </label>
-                    ))}
-                  </div>
-                  <p className="help-text">1 = Not comfortable, 5 = Very comfortable</p>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="concerns">What concerns do you still have?</label>
-                  <textarea
-                    id="concerns"
-                    value={concerns}
-                    onChange={(e) => setConcerns(e.target.value)}
-                    placeholder="Share any concerns or questions..."
-                    rows={4}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="trust">What would increase your trust?</label>
-                  <textarea
-                    id="trust"
-                    value={trust}
-                    onChange={(e) => setTrust(e.target.value)}
-                    placeholder="What would make you more confident in using this service?"
-                    rows={4}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="email">Email (optional)</label>
-                  <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="your@email.com"
-                  />
-                </div>
-
-                <button type="submit" className="submit-button">
-                  Submit Feedback
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Feedback Section */}
+      <FeedbackSection></FeedbackSection>
 
       {/* Footer */}
       <footer className="footer">
