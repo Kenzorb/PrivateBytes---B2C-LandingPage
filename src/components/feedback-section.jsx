@@ -111,6 +111,7 @@ export default function FeedbackSection() {
                                 <label htmlFor="concerns">What concerns do you still have?</label>
                                 <textarea
                                     id="concerns"
+                                    className="formtextboxes"
                                     value={concerns}
                                     onChange={(e) => setConcerns(e.target.value)}
                                     placeholder="Share any concerns or questions..."
@@ -122,6 +123,7 @@ export default function FeedbackSection() {
                                 <label htmlFor="trust">What would increase your trust?</label>
                                 <textarea
                                     id="trust"
+                                    className="formtextboxes"
                                     value={trust}
                                     onChange={(e) => setTrust(e.target.value)}
                                     placeholder="What would make you more confident in using this service?"
@@ -133,6 +135,7 @@ export default function FeedbackSection() {
                                 <label htmlFor="email">Email (optional)</label>
                                 <input
                                     id="email"
+                                    className="formtextboxes"
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}

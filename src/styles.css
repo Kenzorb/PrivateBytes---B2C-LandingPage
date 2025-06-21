@@ -592,3 +592,7 @@ input[type="email"]:focus {
 .to-feedback-button:hover {
   background-color: #059669;
 }
+
+.formtextboxes {
+  background-color: white;
+}
