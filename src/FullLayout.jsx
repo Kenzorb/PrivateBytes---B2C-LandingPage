@@ -185,16 +185,19 @@ export default function LandingPage() {
             </div>
 
             <div className="upload-card">
-              <div className="upload-icon"></div>
 
-              <div>
-                <h3>Confirmation</h3>
-                <p>Click to submit</p>
+              <div style={{"max-width": "150px", "min-width": "150px", "margin": "auto"}}>
+                <div className="upload-icon"></div>
+
+                <div>
+                  <h3>Confirmation</h3>
+                  <p>Click to submit</p>
+                </div>
+
+                <button className={`upload-button ${submitted ? 'submitted' : ''}`} onClick={handleSubmitClick} disabled={submitted}>
+                  {submitted ? 'Submitted' : 'Submit'}
+                </button>
               </div>
-
-              <button className={`upload-button ${submitted ? 'submitted' : ''}`} onClick={handleSubmitClick} disabled={submitted}>
-                {submitted ? 'Submitted' : 'Submit'}
-              </button>
               
               {showUploadPrompt && (
                 <div className="upload-prompt-text" style={{ color: 'red', marginTop: '8px' }}>
