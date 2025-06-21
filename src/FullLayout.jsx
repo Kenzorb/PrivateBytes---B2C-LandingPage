@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import "./styles.css"
 import FeedbackSection from "./components/feedback-section"
 import HowItWorks from "./components/how-it-works"
@@ -16,6 +16,10 @@ export default function LandingPage() {
   const [redactedText, setRedactedText] = useState('');
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
+
+  // Ref for sync scrolling of anonymized chat
+  const preRef = useRef(null);
+  const redactedRef = useRef(null);
 
   const handleUploadClick = () => {
     setUploadClicked(true)
@@ -85,6 +89,30 @@ export default function LandingPage() {
       section.scrollIntoView({ behavior: 'smooth' }); // 'smooth' for a smooth scroll animation
     }
   };
+
+  // Sync scrolling for chat and anonymized
+  useEffect(() => {
+    const pre = preRef.current;
+    const redacted = redactedRef.current;
+
+    if (!pre || !redacted) return;
+
+    const syncScroll = (source, target) => {
+      return () => {
+        target.scrollTop = source.scrollTop;
+      };
+    };
+
+    // Add scroll listeners
+    pre.addEventListener('scroll', syncScroll(pre, redacted));
+    redacted.addEventListener('scroll', syncScroll(redacted, pre));
+
+    // Clean up
+    return () => {
+      pre.removeEventListener('scroll', syncScroll(pre, redacted));
+      redacted.removeEventListener('scroll', syncScroll(redacted, pre));
+    };
+  }, []);
   
 
   const TrackUploadClick = async () => {
@@ -167,14 +195,14 @@ export default function LandingPage() {
             <div className="redactor-container">
               <div className="text-box">
                 <h4 className="box-title">Your Uploaded Chat</h4>
-                <div className="preredacted-text" style={{ whiteSpace: 'pre-wrap' }}>
+                <div className="preredacted-text" style={{ whiteSpace: 'pre-wrap' }} ref={preRef}>
                   {inputText || <span style={{ color: '#999' }}>Upload a file...</span>}
                 </div>
               </div>
 
               <div className="text-box">
                 <h4 className="box-title">Your Anonymized Uploaded Chat</h4>
-                <div className="redacted-text">
+                <div className="redacted-text" ref={redactedRef}>
                   {redactedText && (
                     <>
                       <p>{redactedText}</p>
