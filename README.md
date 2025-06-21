@@ -1,12 +1,51 @@
-# React + Vite
+# 🛡️ PrivateBytes Landing Page
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A secure and interactive landing page for PrivateBytes — a platform that rewards users for anonymously sharing chat data to help businesses make smarter decisions.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- ⚡ Built with React + Vite for blazing-fast performance
+- 🔍 AI-based **chat anonymization** (via local server or API)
+- ✅ Interactive upload and preview experience
+- 🔐 Firebase Firestore for feedback storage
+- 📊 Firebase Analytics (GA4) event tracking
+- 🎯 Clean UI with scroll-linked sections for feedback, trust & privacy
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🖼️ Live Demo
+
+> _(Optional: Add link to your Vercel deployment)_
+
+[Visit the site →](https://your-vercel-link.vercel.app)
+
+---
+
+## 🛠️ Tech Stack
+
+- Frontend: **React**, **Vite**
+- Backend/API: **Node.js** (for redaction API, if applicable)
+- Database: **Firebase Firestore**
+- Analytics: **Firebase GA4**
+- Hosting: **Vercel**
+
+---
+
+## 📂 Folder Structure
+
+```bash
+├── public/
+├── src/
+│   ├── components/
+│   │   ├── feedback-section.jsx
+│   │   ├── how-it-works.jsx
+│   │   └── trust-and-privacy.jsx
+│   ├── config/
+│   │   └── firebase-config.js
+│   ├── styles.css
+│   └── LandingPage.jsx
+├── .gitignore
+├── package.json
+└── README.md
