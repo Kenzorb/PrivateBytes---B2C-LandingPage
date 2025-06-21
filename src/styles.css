@@ -531,7 +531,7 @@ input[type="email"]:focus {
   min-height: 300px;
   max-width: 450px;
   max-height: 300px;
-  margin: 1rem 1rem;
+  margin: 1rem 0;
   background-color: hsl(0, 0%, 90%);
   border: 2px solid black;
   scrollbar-width: none;      /* hide scrollbar */
@@ -552,7 +552,7 @@ input[type="email"]:focus {
   min-height: 300px;
   max-width: 450px;
   max-height: 300px;
-  margin: 1rem 1rem;
+  margin: 1rem 0;
   background-color: hsl(0, 0%, 90%);
   border: 2px solid black;
   scrollbar-width: none;      /* hide scrollbar */
