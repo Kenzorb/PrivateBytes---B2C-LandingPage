@@ -527,7 +527,7 @@ input[type="email"]:focus {
 
 .preredacted-text {
   display: flex;
-  min-width: 450px;
+  min-width: 100px;
   min-height: 300px;
   max-width: 450px;
   max-height: 300px;
@@ -548,7 +548,7 @@ input[type="email"]:focus {
 
 .redacted-text {
   display: flex;
-  min-width: 450px;
+  min-width: 100px;
   min-height: 300px;
   max-width: 450px;
   max-height: 300px;
@@ -595,4 +595,13 @@ input[type="email"]:focus {
 
 .formtextboxes {
   background-color: white;
+}
+
+.text-box {
+  display: flex;
+  flex-direction: column;
+  max-width: 450px;
+  min-width: 100px;
+  justify-content: center;
+  align-items: center;
 }
