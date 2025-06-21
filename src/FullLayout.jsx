@@ -52,7 +52,7 @@ export default function LandingPage() {
       // Trigger redaction
       setLoading(true);
       try {
-        const response = await fetch('http://localhost:5050/redact', {
+        const response = await fetch('https://backend-pii-redactor-1.onrender.com/redact', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
