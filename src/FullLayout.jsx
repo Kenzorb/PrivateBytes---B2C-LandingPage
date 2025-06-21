@@ -91,18 +91,29 @@ export default function LandingPage() {
     const analytics = await getAnalyticsInstance()
     if (analytics) {
       logEvent(analytics, "chat_upload_click", {
-        label: "Upload Chat Click",
+        label: "chat_upload_click",
       })
     } else {
       console.warn("Analytics is not supported")
     }
   }
 
-  const TrackSubmitClick = async () => {
+  const TrackSubmitClick = async () => {      //Signals follow-through after using the upload/redaction demo. Very useful for conversion funnel analysis.
     const analytics = await getAnalyticsInstance()
     if (analytics) {
       logEvent(analytics, "chat_uploaded_and_submitted_click", {
-        label: "Submit Chat and Upload Click",
+        label: "chat_uploaded_and_submitted_click",
+      })
+    } else {
+      console.warn("Analytics is not supported")
+    }
+  }
+
+  const TrackEarlyInterestClick = async () => {   //Tracks curiosity and intent to scroll or explore beyond the hero section.
+    const analytics = await getAnalyticsInstance()
+    if (analytics) {
+      logEvent(analytics, "Learn_more_button", {
+        label: "Learn_more_button",
       })
     } else {
       console.warn("Analytics is not supported")
@@ -127,7 +138,7 @@ export default function LandingPage() {
 
           <p className="hero-subtitle">Help businesses make smarter decisions. Your data, your control.</p>
 
-          <button className="cta-button" onClick={scrollToSection1}>
+          <button className="cta-button" onClick={() => {scrollToSection1(); TrackEarlyInterestClick()}}>
             <span className="icon"></span> Learn More
           </button>
 

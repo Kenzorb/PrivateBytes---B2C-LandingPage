@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { db } from "../config/firebase-config"
 import { collection, addDoc } from "firebase/firestore"
+import { logEvent } from "firebase/analytics";
+import { getAnalyticsInstance } from "../config/firebase-config"
 
 export default function FeedbackSection() {
 
@@ -48,6 +50,7 @@ export default function FeedbackSection() {
             setEmail("")
 
             setFormSubmitted(true) //hide form, show thank-you
+            TrackFeedbackSubmitClick()
         }
         catch(err) {
             console.error(err)
@@ -55,6 +58,16 @@ export default function FeedbackSection() {
         
     }
 
+    const TrackFeedbackSubmitClick = async () => {   //Tracks user trust & follow-up engagement.
+        const analytics = await getAnalyticsInstance()
+        if (analytics) {
+            logEvent(analytics, "feedback_form_submitted", {
+                label: "feedback_form_submitted",
+        })
+        } else {
+            console.warn("Analytics is not supported")
+        }
+    }
 
     return (
         <>
