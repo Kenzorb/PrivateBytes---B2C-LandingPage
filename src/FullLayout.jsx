@@ -120,6 +120,7 @@ export default function LandingPage() {
     }
   }
 
+
   return (
     <div className="landing-page">
       {/* Hero Section */}
@@ -127,7 +128,7 @@ export default function LandingPage() {
         <div className="container">
           <div className="icon-container">
             <div className="icon-circle">
-              <img src="./public/favicon.ico" className="companylogo"></img>
+              <img src="./favicon.ico" className="companylogo"></img>
             </div>
             
           </div>
