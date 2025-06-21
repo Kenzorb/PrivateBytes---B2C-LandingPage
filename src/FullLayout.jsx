@@ -230,7 +230,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="footer">
         <div className="container">
-          <p>© 2024 DataShare. Your privacy, your control.</p>
+          <p>© 2025 PrivateBytes. Your privacy, your control.</p>
         </div>
       </footer>
     </div>
